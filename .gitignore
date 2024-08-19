@@ -13,6 +13,7 @@ dist/
 .env.development.local
 .env.test.local
 .env.production.local
+wp-command-center-68f9461439b8.json
 
 # Logs
 logs/

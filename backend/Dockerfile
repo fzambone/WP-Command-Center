@@ -13,8 +13,11 @@ RUN npm install
 # Copy source files
 COPY . .
 
+# Install development dependencies globally
+RUN npm install -g nodemon typescript
+
 # Start the server with hot-reloading using nodemon
-CMD ["npx", "nodemon", "src/index.ts"]
+CMD ["nodemon", "--watch", "src", "--exec", "ts-node", "src/server.ts"]
 
 # Expose the new port for development
 EXPOSE 4000
@@ -33,10 +36,10 @@ RUN npm install --production
 COPY . .
 
 # Compile TypeScript to JavaScript
-RUN npx tsc
+RUN npm run build
 
 # Start the server
-CMD ["node", "dist/index.js"]
+CMD ["node", "dist/server.js"]
 
 # Expose the new port for production
 EXPOSE 4000
