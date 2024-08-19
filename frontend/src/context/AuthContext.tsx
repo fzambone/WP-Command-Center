@@ -1,36 +1,65 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { onAuthStateChanged, User } from "firebase/auth";
-import { auth } from "../firebaseConfig";
+import React, { createContext, ReactNode, useEffect, useState } from "react";
+import axios from "axios";
 
-interface AuthContextProps {
-  user: User | null;
-  loading: boolean;
+interface AuthContextType {
+  isAuthenticated: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
 }
 
-const AuthContext = createContext<AuthContextProps>({
-  user: null,
-  loading: true,
-});
+interface AuthProviderProps {
+  children: ReactNode;
+}
 
-export const useAuth = () => useContext(AuthContext);
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined
+);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setLoading(false);
-    });
+    const validateToken = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const response = await axios.get(
+            `process.env.REACT_APP_API_URL}/api/auth/validate-token`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          setIsAuthenticated(response.data === 200);
+        } catch (error) {
+          console.error("Invalid or expired token:", error);
+          localStorage.removeItem("token");
+          setIsAuthenticated(false);
+        }
+      }
+    };
 
-    return () => unsubscribe();
+    validateToken();
   }, []);
 
+  const login = async (email: string, password: string) => {
+    const response = await axios.post(
+      `${process.env.REACT_APP_API_URL}/api/auth/login`,
+      { email, password }
+    );
+    const { token } = response.data;
+    localStorage.setItem("token", token);
+    setIsAuthenticated(true);
+  };
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    setIsAuthenticated(false);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
