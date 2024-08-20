@@ -1,3 +1,4 @@
+import * as express from "express";
 import { DecodedIdToken } from "firebase-admin/auth";
 
 declare module "express-serve-static-core" {
