@@ -1,85 +1,93 @@
-# WP-Command-Center
+# WP Command Center
 
-WP-Command-Center is a centralized control panel designed for managing and maintaining 50+ WordPress sites hosted on AWS Lightsail. This tool enables efficient site management with features like one-click updates, rollback functionality, user management, notifications, and basic logging.
+## Project Overview
 
-## Table of Contents
+WP Command Center is a comprehensive dashboard application for managing multiple WordPress websites. It provides centralized control over WordPress installations, plugin management, site monitoring, and maintenance tasks. The application is built using a microservices architecture and is designed to work with WordPress sites hosted on AWS Lightsail.
 
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Running Locally](#running-locally)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+## Architecture
 
-## Features
+The application consists of the following microservices:
 
-- **One-Click Updates**: Easily update WordPress core, themes, and plugins across all sites.
-- **Rollback Functionality**: Revert to previous versions if something goes wrong.
-- **User Management**: Manage access with Firebase Authentication.
-- **Notifications**: Get notified via Slack and Email for important updates.
-- **Basic Logging**: Track essential events and errors.
-- **SSL/TLS Encryption**: Secure communication between services.
+1. Authentication Service (Port: 4000)
+2. Space Management Service (Port: 4001)
+3. WordPress Site Management Service (Port: 4002)
+4. AWS Lightsail Integration Service (Port: 4003)
+5. Plugin Management Service (Port: 4004)
+6. Monitoring Service (Port: 4005)
+7. Maintenance Task Service (Port: 4006)
+8. Logging Service (Port: 4007)
 
-## Tech Stack
+Frontend:
 
-- **Frontend**: React (TypeScript)
-- **Backend**: Node.js with Express.js
-- **Database**: MongoDB via AWS DocumentDB
-- **Authentication**: Firebase Authentication
-- **Task Scheduler**: RabbitMQ via AWS MQ
-- **Deployment**: Docker for local development, AWS Elastic Beanstalk for production
+- React-based single-page application
 
-## Getting Started
+## Technology Stack
 
-### Prerequisites
+- Backend:
+  - Java 21
+  - Spring Boot 3.3.2
+  - Spring Data JPA
+  - Spring Security
+  - AWS SDK for Java
+  - Docker
+- Frontend:
+  - React
+- Database:
+  - AWS RDS (MySQL)
+- Authentication:
+  - Firebase Authentication
+- Cloud Infrastructure:
+  - AWS Lightsail
+  - AWS S3
+  - AWS RDS
+- Logging and Monitoring:
+  - Elasticsearch
+  - Spring Boot Actuator
+  - Micrometer
 
-- **Docker** and **Docker Compose** installed
-- **Node.js** (v18 or later)
-- **npm** (v9 or later)
-- **AWS Account** (for Lightsail, DocumentDB, and Elastic Beanstalk)
-- **Firebase Account** (for Authentication)
+## Setup and Installation
 
-### Installation
+1. Clone the repository:
 
-1. **Clone the repository**:
-
-   ```bash
-   git clone https://github.com/your-username/WP-Command-Center.git
-   cd WP-Command-Center
+   ```
+   git clone https://github.com/your-username/wp-command-center.git
+   cd wp-command-center
    ```
 
-2. **Install dependencies for both frontend and backend**:
-   ```bash
-   cd backend
-   npm install
-   cd frontend
-   npm install
+2. Set up environment variables:
+
+   - Create a `.env` file in the root directory
+   - Add necessary environment variables (database credentials, AWS credentials, etc.)
+
+3. Build the project:
+
+   ```
+   ./mvnw clean package -DskipTests
    ```
 
-### Running Locally
-
-1. **Start Docker containers**:
-
-   ```bash
-   docker-compose up --build
+4. Run the services:
+   ```
+   docker-compose up -d
    ```
 
-2. **Access Application**:
+## Development
 
-- **Backend**: http://localhost:3000
-- **Frontend**: http://localhost:5000
+- Backend development is done using IntelliJ IDEA CE
+- Frontend development is done using Visual Studio Code
+- Ensure you have Java 21 and Node.js installed on your development machine
 
-### Usage
+## API Documentation
 
-- **Dashboard**: View and manage all WordPress websites.
-- **Updates**: Trigger manual updates to WordPress core, themes and plugins.
-- **User Management**: Manage users and roles with Firebase Authentication.
-- **Notifications**: Configure Slack and Email for notifications.
+API documentation for each service can be found in their respective directories.
 
-### Contributing
+## Contributing
 
-For questions or suggestions, please contact fernando.zambone@gmail.com.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+
+## Contact
+
+For any queries, please reach out to [fernando.zambone@gmail.com](mailto:fernando.zambone@gmail.com).
