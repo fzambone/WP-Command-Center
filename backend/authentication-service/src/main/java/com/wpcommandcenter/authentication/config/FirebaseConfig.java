@@ -13,12 +13,14 @@ import java.io.IOException;
 public class FirebaseConfig {
 
     @Bean
-    public FirebaseApp firebaseApp() throws IOException {
-        FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(new ClassPathResource("firebase-service-account.json").getInputStream()))
-                .build();
-
-        return FirebaseApp.initializeApp(options);
+    public FirebaseApp firebaseApp() {
+        try {
+            FirebaseOptions options = FirebaseOptions.builder()
+                    .setCredentials(GoogleCredentials.fromStream(new ClassPathResource("firebase-service-account.json").getInputStream()))
+                    .build();
+            return FirebaseApp.initializeApp(options);
+        } catch (IOException e) {
+            throw new IllegalStateException("Failed to initialize Firebase. Check your service account file.", e);
+        }
     }
-
 }
